@@ -1,0 +1,7 @@
+.vscode
+*\.patch
+*\.crt
+*\.csr
+*\.key
+*\.pfx
+cert_extensions
