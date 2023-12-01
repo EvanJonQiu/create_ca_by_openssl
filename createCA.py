@@ -124,13 +124,26 @@ try:
 
   session.expect(prompt)
   session.sendline("exit")
-  print("generate success")
+  print("generate p12 success")
 
   if args.p12:
     print("********************")
     print("please execute following command on target machine to generate keystore for tomcat")
-    print("keytool -importkeystore -srckeystore server.p12 -srcstoretype PKCS12 -destkeystore server.jks -srcstorepass 11111111 -deststorepass 11111111")
+    print("keytool -importkeystore -srckeystore server.p12 -srcstoretype PKCS12 -destkeystore server.jks -srcstorepass " + export_password + " -deststorepass " + export_password)
     print("********************")
+    
+    keytool_cmd = "keytool -importkeystore -srckeystore server.p12 -srcstoretype PKCS12 -destkeystore server.jks -srcstorepass " + export_password + " -deststorepass " + export_password
+    child.sendline(keytool_cmd)
+    try:
+      ret = child.expect(["0 个条目失败或取消".encode('GBK'), "是否覆盖\? \[否\]: ".encode("GBK")])
+      if ret == 1:
+        print("generate keystore success")
+      elif ret == 2:
+        child.sendline("y")
+        child.expect("0 个条目失败或取消".encode('GBK'))
+        print("generate keystore success")
+    except:
+      print("Generate keystore failed!")
 
 except Exception as e:
   print(e)

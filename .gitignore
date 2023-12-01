@@ -5,3 +5,7 @@
 *\.key
 *\.pfx
 cert_extensions
+*\.jks
+*\.p12
+*\.rsa
+*.zip
