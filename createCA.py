@@ -11,6 +11,8 @@ import pexpect
 import sys
 from pexpect import popen_spawn
 import argparse
+import os
+import zipfile
 
 machine_name = "server1.server.com"
 export_password = "11111111"
@@ -144,6 +146,37 @@ try:
         print("generate keystore success")
     except:
       print("Generate keystore failed!")
+
+  # 将生成的文件打包成keys.zip
+  # Create a list of generated files to include in the zip
+  generated_files = [
+    "server.key",
+    "server.csr",
+    "server.crt",
+    "server.pfx",
+    "cert_extensions"
+  ]
+  
+  # Add additional files based on arguments
+  if args.crt or args.p12:
+    generated_files.extend(["server.rsa"])
+    
+  if args.p12:
+    generated_files.extend(["server.p12", "server.jks"])
+
+  # Remove existing zip file if it exists
+  zip_filename = "keys.zip"
+  if os.path.exists(zip_filename):
+    os.remove(zip_filename)
+    print(f"Removed existing {zip_filename}")
+  
+  # Create the zip file
+  with zipfile.ZipFile("keys.zip", "w") as keys_zip:
+    for file in generated_files:
+      if os.path.exists(file):
+        keys_zip.write(file)
+        
+  print("Generated files have been packed into keys.zip")
 
 except Exception as e:
   print(e)
