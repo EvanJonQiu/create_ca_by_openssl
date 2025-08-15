@@ -17,3 +17,13 @@ python createCA.py [--domain domain] [--password password] [--ip ip] [--crt | --
 --crt 生成pfx证书的同时，生成Nginx可以使用的证书。
 
 --p12 生成p12证书，该证书可以用于生成keystore用于tomcat。该证书会生成crt证书。
+
+## 可执行程序
+
+### 依赖库来源：
+
+https://github.com/clamwin/openssl
+
+### 编译前准备
+
+将依赖库下载后，放到lib/目录下
